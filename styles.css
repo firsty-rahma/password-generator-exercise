@@ -2,6 +2,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f0f4f8;
     display: flex;
+    gap: 10px;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -73,3 +74,14 @@ button:hover {
     border-radius: 5px;
     transition: 0.5s;
 }
+
+#history-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #history-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+  }

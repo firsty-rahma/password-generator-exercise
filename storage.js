@@ -1,10 +1,8 @@
-export function storePassword(password, url) {
-    localStorage.setItem('lastGeneratedPassword', JSON.stringify({
-        password, url
-    }));
+export function storePassword(passwordData) {
+    localStorage.setItem('password_data', JSON.stringify(passwordData));
 }
 
 export function getLatestPassword() {
-    const storedPassword = localStorage.getItem('lastGeneratedPassword');
-    return storedPassword ? JSON.parse(storedPassword):null
+    const storedPassword = localStorage.getItem('password_data');
+    return storedPassword ? JSON.parse(storedPassword):[]
 }

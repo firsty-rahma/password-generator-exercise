@@ -8,7 +8,8 @@ class PasswordGenApp {
         this.passwordTxt = document.getElementById('password');
         this.copyBtn = document.getElementById('copy');
         this.urlInput = document.getElementById('url');
-
+        this.latestPassword = getLatestPassword();
+        this.historyList = document.getElementById('history-list');
         this.init();
     }
 
@@ -17,25 +18,30 @@ class PasswordGenApp {
         this.copyBtn.addEventListener('click', () => this.copyPassword());
         
         window.addEventListener('load', () => {
-            const lastPassword = getLatestPassword();
-
-            if (lastPassword) {
-                this.passwordTxt.value = lastPassword.password;
-                this.urlInput.value = lastPassword.url || '';
-            }
+            this.showHistory();
         })
     }
 
     savePassword() {
         const length = this.passwordLengthInput.value;
-        const url = this.urlInput.value;
+        let url = this.urlInput.value;
+
+        if(url == '') {
+            url = "No url";
+        }
 
         let password = generatePassword(length);
-
         this.passwordTxt.value = password;
+        
+        let passwordData = {
+            url_name: url,
+            pass: password,
+        }
 
         powerPassword(password);
-        storePassword(password, url);
+        this.latestPassword = this.savedToHistory(passwordData);
+        storePassword(this.latestPassword);
+        this.showHistory();
     }
 
     copyPassword() {
@@ -45,6 +51,22 @@ class PasswordGenApp {
         }).catch(err => {
             alert('Failed to copy text :', err);
         });
+    }
+
+    savedToHistory(passwordData) {
+        if (!this.latestPassword.includes(passwordData)) {
+            this.latestPassword.unshift(passwordData);
+            if (this.latestPassword.length > 5) {
+                this.latestPassword.pop();
+            }
+        }
+        return this.latestPassword;
+    }
+
+    showHistory(){
+        this.historyList.innerHTML = this.latestPassword
+        .map(passwordData => `<li>${passwordData.pass} for ${passwordData.url_name}</li>`)
+        .join('')
     }
 }
 
